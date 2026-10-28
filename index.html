@@ -1181,37 +1181,32 @@ ${details}
               shoot_date: formattedDateKey,
               time_slot: state.selectedTime,
               message: details,
-              _subject: `New Booking [${refId}]: ${state.selectedService} (${formattedDateKey})`
+              _subject: `New Call Sheet Booking [${refId}]: ${state.selectedService} (${formattedDateKey})`
             })
           })
           .then(response => {
             submitBtn.disabled = false;
             submitBtn.innerHTML = originalBtnText;
-            markDateAsBooked();
-            
-            // Set confirmation values
-            document.getElementById('conf-ref-id').textContent = `#${refId}`;
-            document.getElementById('conf-datetime').textContent = `${formattedDateKey} @ ${state.selectedTime}`;
-            document.getElementById('conf-service').textContent = state.selectedService;
-            document.getElementById('conf-email').textContent = email;
 
-            navigateToStep(4);
-            showToast('Call Sheet Transmitted & Date Reserved!', 'info');
+            if (response.ok) {
+              markDateAsBooked();
+              
+              // Set confirmation values
+              document.getElementById('conf-ref-id').textContent = `#${refId}`;
+              document.getElementById('conf-datetime').textContent = `${formattedDateKey} @ ${state.selectedTime}`;
+              document.getElementById('conf-service').textContent = state.selectedService;
+              document.getElementById('conf-email').textContent = email;
+
+              navigateToStep(4);
+              showToast('Call Sheet Transmitted & Date Reserved!', 'info');
+            } else {
+              showToast('Transmission error. Please try again.', 'error');
+            }
           })
           .catch(error => {
             submitBtn.disabled = false;
             submitBtn.innerHTML = originalBtnText;
-            markDateAsBooked();
-
-            // Fallback to direct client mailto prompt if endpoint fails
-            window.location.href = `mailto:${state.primaryEmail}?subject=${encodeURIComponent('PRODUCTION CALL SHEET [' + refId + ']: ' + state.selectedService)}&body=${encodeURIComponent(emailBody)}`;
-            
-            document.getElementById('conf-ref-id').textContent = `#${refId}`;
-            document.getElementById('conf-datetime').textContent = `${formattedDateKey} @ ${state.selectedTime}`;
-            document.getElementById('conf-service').textContent = state.selectedService;
-            document.getElementById('conf-email').textContent = email;
-
-            navigateToStep(4);
+            showToast('Unable to connect. Check your internet connection.', 'error');
           });
         };
       }
