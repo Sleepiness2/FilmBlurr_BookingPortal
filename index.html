@@ -653,6 +653,8 @@
       primaryEmail: 'beckettmoviemaker@gmail.com',
       // Store AVAILABLE dates explicitly
       availableDates: JSON.parse(localStorage.getItem('studio_available_dates') || '[]'),
+      // Store BOOKED dates
+      bookedDates: JSON.parse(localStorage.getItem('studio_booked_dates') || '[]'),
       isAdminDragging: false,
       adminDragTargetState: null
     };
@@ -783,14 +785,17 @@
 
         const isPast = cellDate < todayDate;
         const isBeyondMax = cellDate > maxDate;
-        // Default to unavailable: only available if present in state.availableDates
-        const isAvailable = state.availableDates.includes(key);
+        const isBooked = state.bookedDates.includes(key);
+        // Default to unavailable: only available if present in state.availableDates and not already booked
+        const isAvailable = state.availableDates.includes(key) && !isBooked;
         const isDisabled = isPast || isBeyondMax || !isAvailable;
 
         let bgClasses = "bg-film-850 text-white border-film-700 hover:border-white";
         
         if (state.selectedDate && formatDateKey(state.selectedDate) === key) {
           bgClasses = "bg-white text-black font-extrabold border-white";
+        } else if (isBooked) {
+          bgClasses = "bg-rose-950 text-rose-400 border-rose-800 cursor-not-allowed opacity-60 line-through";
         } else if (isDisabled) {
           bgClasses = "bg-film-950 text-film-600 border-film-850 cursor-not-allowed opacity-40 line-through";
         }
@@ -1126,12 +1131,42 @@
           const refId = 'CS-' + Math.floor(1000 + Math.random() * 9000);
           const formattedDateKey = formatDateKey(state.selectedDate);
 
-          // Mailto dispatch replaced with Formspree AJAX submission
           const submitBtn = document.getElementById('btn-submit-booking');
           const originalBtnText = submitBtn.innerHTML;
           submitBtn.disabled = true;
           submitBtn.innerHTML = `<span>TRANSMITTING...</span>`;
 
+          const emailBody = `NEW CALL SHEET BOOKING REQUEST
+---------------------------------
+Reference: ${refId}
+Category: ${state.selectedService}
+Shoot Date: ${formattedDateKey}
+Time Slot: ${state.selectedTime}
+
+Client Name: ${name}
+Client Email: ${email}
+Client Phone: ${phone}
+
+Project Details & Brief:
+${details}
+---------------------------------`;
+
+          // Helper to mark date as booked in state & local storage
+          const markDateAsBooked = () => {
+            // Remove from available dates
+            const availIdx = state.availableDates.indexOf(formattedDateKey);
+            if (availIdx !== -1) {
+              state.availableDates.splice(availIdx, 1);
+              localStorage.setItem('studio_available_dates', JSON.stringify(state.availableDates));
+            }
+            // Add to booked dates
+            if (!state.bookedDates.includes(formattedDateKey)) {
+              state.bookedDates.push(formattedDateKey);
+              localStorage.setItem('studio_booked_dates', JSON.stringify(state.bookedDates));
+            }
+          };
+
+          // Transmit request via Formspree AJAX
           fetch('https://formspree.io/f/xbjnqgya', {
             method: 'POST',
             headers: {
@@ -1139,28 +1174,43 @@
               'Accept': 'application/json'
             },
             body: JSON.stringify({
-              _replyto: email,
-              recipient: 'beckettmoviemaker@gmail.com',
-              reference_id: refId,
-              service_category: state.selectedService,
+              name: name,
+              email: email,
+              phone: phone,
+              service: state.selectedService,
               shoot_date: formattedDateKey,
-              call_time: state.selectedTime,
-              client_name: name,
-              client_email: email,
-              client_phone: phone,
-              project_brief: details
+              time_slot: state.selectedTime,
+              message: details,
+              _subject: `New Booking [${refId}]: ${state.selectedService} (${formattedDateKey})`
             })
           })
           .then(response => {
             submitBtn.disabled = false;
             submitBtn.innerHTML = originalBtnText;
+            markDateAsBooked();
+            
+            // Set confirmation values
+            document.getElementById('conf-ref-id').textContent = `#${refId}`;
+            document.getElementById('conf-datetime').textContent = `${formattedDateKey} @ ${state.selectedTime}`;
+            document.getElementById('conf-service').textContent = state.selectedService;
+            document.getElementById('conf-email').textContent = email;
+
             navigateToStep(4);
+            showToast('Call Sheet Transmitted & Date Reserved!', 'info');
           })
           .catch(error => {
             submitBtn.disabled = false;
             submitBtn.innerHTML = originalBtnText;
-            // Fallback to direct client prompt if network blocked
-            window.location.href = `mailto:${state.primaryEmail}?subject=${encodeURIComponent('PRODUCTION CALL SHEET [' + refId + ']: ' + state.selectedService)}&body=${encodeURIComponent(details)}`;
+            markDateAsBooked();
+
+            // Fallback to direct client mailto prompt if endpoint fails
+            window.location.href = `mailto:${state.primaryEmail}?subject=${encodeURIComponent('PRODUCTION CALL SHEET [' + refId + ']: ' + state.selectedService)}&body=${encodeURIComponent(emailBody)}`;
+            
+            document.getElementById('conf-ref-id').textContent = `#${refId}`;
+            document.getElementById('conf-datetime').textContent = `${formattedDateKey} @ ${state.selectedTime}`;
+            document.getElementById('conf-service').textContent = state.selectedService;
+            document.getElementById('conf-email').textContent = email;
+
             navigateToStep(4);
           });
         };
