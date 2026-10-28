@@ -1136,38 +1136,21 @@
           submitBtn.disabled = true;
           submitBtn.innerHTML = `<span>TRANSMITTING...</span>`;
 
-          const emailBody = `NEW CALL SHEET BOOKING REQUEST
----------------------------------
-Reference: ${refId}
-Category: ${state.selectedService}
-Shoot Date: ${formattedDateKey}
-Time Slot: ${state.selectedTime}
-
-Client Name: ${name}
-Client Email: ${email}
-Client Phone: ${phone}
-
-Project Details & Brief:
-${details}
----------------------------------`;
-
           // Helper to mark date as booked in state & local storage
           const markDateAsBooked = () => {
-            // Remove from available dates
             const availIdx = state.availableDates.indexOf(formattedDateKey);
             if (availIdx !== -1) {
               state.availableDates.splice(availIdx, 1);
               localStorage.setItem('studio_available_dates', JSON.stringify(state.availableDates));
             }
-            // Add to booked dates
             if (!state.bookedDates.includes(formattedDateKey)) {
               state.bookedDates.push(formattedDateKey);
               localStorage.setItem('studio_booked_dates', JSON.stringify(state.bookedDates));
             }
           };
 
-          // Transmit request via Formspree AJAX
-          fetch('https://formspree.io/f/xbjnqgya', {
+          // Transmit request via Formspree AJAX using live endpoint
+          fetch('https://formspree.io/f/xjyywnlb', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -1191,7 +1174,6 @@ ${details}
             if (response.ok) {
               markDateAsBooked();
               
-              // Set confirmation values
               document.getElementById('conf-ref-id').textContent = `#${refId}`;
               document.getElementById('conf-datetime').textContent = `${formattedDateKey} @ ${state.selectedTime}`;
               document.getElementById('conf-service').textContent = state.selectedService;
@@ -1204,14 +1186,14 @@ ${details}
               if (errorData && errorData.errors && errorData.errors.length > 0) {
                 showToast(`Formspree: ${errorData.errors[0].message}`, 'error');
               } else {
-                showToast('Formspree setup incomplete or form unverified.', 'error');
+                showToast('Formspree response error. Check form status.', 'error');
               }
             }
           })
           .catch(error => {
             submitBtn.disabled = false;
             submitBtn.innerHTML = originalBtnText;
-            showToast('Unable to reach Formspree. Check form ID or connection.', 'error');
+            showToast('Unable to reach Formspree. Check network connection.', 'error');
           });
         };
       }
