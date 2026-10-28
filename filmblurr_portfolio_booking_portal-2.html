@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FilmBlurr — Portfolio, Booking & Production</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Google Fonts: Space Grotesk, Syne & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;0,800;1,400&family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Space Grotesk"', 'sans-serif'],
+            display: ['"Syne"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            film: {
+              950: '#0a0a0a',
+              900: '#121212',
+              850: '#1a1a1a',
+              800: '#282828',
+              700: '#404040',
+              600: '#525252',
+              400: '#a3a3a3',
+              300: '#d4d4d4',
+              200: '#e5e5e5',
+              100: '#ffffff',
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    body {
+      background-color: #0a0a0a;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+      background-size: 24px 24px;
+      color: #ffffff;
+    }
+
+    .callsheet-grid-header {
+      background: #ffffff;
+      color: #000000;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0a0a0a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #404040;
+      border-radius: 2px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #ffffff;
+    }
+
+    @keyframes recPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.2; }
+    }
+    .rec-dot {
+      animation: recPulse 1.4s infinite ease-in-out;
+    }
+  </style>
+</head>
+<body class="h-full font-mono antialiased selection:bg-white selection:text-black flex flex-col min-h-screen">
+
+  <!-- Top Disclaimer Banner -->
+  <div class="bg-white text-black text-[11px] font-bold py-1.5 px-4 text-center border-b border-white flex items-center justify-center space-x-2">
+    <span class="w-2 h-2 rounded-full bg-black inline-block rec-dot"></span>
+    <span>hey, this website is unfortunately AI generated at the moment and I plan to hire real people when I am able. thanks!</span>
+  </div>
+
+  <!-- Header Navigation -->
+  <header class="sticky top-0 z-40 bg-film-950/95 backdrop-blur-md border-b-2 border-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        
+        <!-- Brand & Logo -->
+        <div class="flex items-center space-x-3 shrink-0">
+          <div class="w-10 h-10 bg-white text-black p-1 flex items-center justify-center border border-white shrink-0">
+            <svg viewBox="0 0 500 500" class="w-full h-full text-black fill-current" xmlns="http://www.w3.org/2000/svg">
+              <rect x="15" y="15" width="470" height="470" fill="none" stroke="black" stroke-width="24"/>
+              <path d="M 50,50 H 260 C 370,50 370,220 260,220 H 130 V 450 H 50 Z M 130,115 V 165 H 240 C 290,165 290,115 240,115 Z" fill="black"/>
+              <path d="M 130,220 C 130,140 280,140 330,220 C 380,300 320,450 180,450 C 110,450 130,340 180,340 C 240,340 270,400 230,400 C 180,400 180,260 270,220 Z" fill="black"/>
+            </svg>
+          </div>
+          <div>
+            <div class="flex items-center space-x-2">
+              <h1 class="font-display font-extrabold text-2xl tracking-tight text-white uppercase">FILM<span class="text-film-400">BLURR</span></h1>
+              <span class="inline-flex items-center space-x-1 px-2 py-0.5 text-[9px] uppercase font-mono font-bold bg-film-850 text-white border border-film-700">
+                <span class="w-1.5 h-1.5 rounded-full bg-white inline-block rec-dot"></span>
+                <span>STUDIO</span>
+              </span>
+            </div>
+            <p class="text-[11px] text-film-400">Cinematography, Direction &amp; Post Production</p>
+          </div>
+        </div>
+
+        <!-- Main Navigation Tabs -->
+        <nav class="flex flex-wrap md:flex-nowrap items-center gap-2 sm:gap-3 text-sm font-bold uppercase w-full md:w-auto">
+          <button id="nav-home" onclick="switchMainTab('home')" class="flex-1 md:flex-initial px-6 py-3 bg-white text-black font-extrabold border border-white transition flex items-center justify-center space-x-2">
+            <i data-lucide="home" class="w-4 h-4"></i>
+            <span>HOME</span>
+          </button>
+
+          <button id="nav-portfolio" onclick="switchMainTab('portfolio')" class="flex-1 md:flex-initial px-6 py-3 bg-film-850 text-film-300 hover:text-white border border-film-700 hover:border-white transition flex items-center justify-center space-x-2">
+            <i data-lucide="film" class="w-4 h-4"></i>
+            <span>PORTFOLIO</span>
+          </button>
+
+          <button id="nav-schedule" onclick="switchMainTab('schedule')" class="flex-1 md:flex-initial px-6 py-3 bg-film-850 text-film-300 hover:text-white border border-film-700 hover:border-white transition flex items-center justify-center space-x-2">
+            <i data-lucide="calendar" class="w-4 h-4"></i>
+            <span>SCHEDULE &amp; BOOKING</span>
+          </button>
+        </nav>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- Main View Area -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col justify-between">
+
+    <!-- TAB 1: HOME PAGE -->
+    <section id="tab-home" class="space-y-12">
+      <div class="border-2 border-white bg-film-900 p-8 sm:p-12 space-y-6 relative overflow-hidden">
+        <div class="max-w-2xl space-y-4">
+          <span class="bg-white text-black px-2.5 py-1 text-xs font-extrabold tracking-widest uppercase">DIRECTOR &amp; CINEMATOGRAPHER</span>
+          <h1 class="text-4xl sm:text-6xl font-display font-extrabold tracking-tight uppercase leading-none text-white">VISUAL STORIES THAT RESONATE.</h1>
+          <p class="text-sm font-mono text-film-300 leading-relaxed">
+            FilmBlurr is an independent film studio specializing in high-impact narrative films, short-form creative media, commercial visuals, and post-production color &amp; editing.
+          </p>
+        </div>
+      </div>
+
+      <!-- Quick Feature Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="p-6 bg-film-900 border border-film-700 space-y-3">
+          <div class="w-10 h-10 bg-white text-black flex items-center justify-center font-bold">
+            <i data-lucide="video" class="w-5 h-5"></i>
+          </div>
+          <h3 class="font-display font-bold text-lg text-white uppercase">CINEMATOGRAPHY</h3>
+          <p class="text-xs text-film-400 leading-relaxed">High-definition 4K digital cinema capture with cinema primes, dynamic lighting setups, and sound design.</p>
+        </div>
+
+        <div class="p-6 bg-film-900 border border-film-700 space-y-3">
+          <div class="w-10 h-10 bg-white text-black flex items-center justify-center font-bold">
+            <i data-lucide="smartphone" class="w-5 h-5"></i>
+          </div>
+          <h3 class="font-display font-bold text-lg text-white uppercase">SHORT FORM MEDIA</h3>
+          <p class="text-xs text-film-400 leading-relaxed">Rapid vertical content engineered for Reels, TikToks, and high-engagement promotional brand media.</p>
+        </div>
+
+        <div class="p-6 bg-film-900 border border-film-700 space-y-3">
+          <div class="w-10 h-10 bg-white text-black flex items-center justify-center font-bold">
+            <i data-lucide="scissors" class="w-5 h-5"></i>
+          </div>
+          <h3 class="font-display font-bold text-lg text-white uppercase">POST PRODUCTION</h3>
+          <p class="text-xs text-film-400 leading-relaxed">Full-service offline/online editing, DaVinci Resolve color grading, audio mastering, and call sheet dispatching.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: PORTFOLIO -->
+    <section id="tab-portfolio" class="space-y-8 hidden">
+      <div class="flex items-center justify-between border-b border-film-800 pb-4">
+        <div>
+          <span class="text-xs font-mono font-bold bg-white text-black px-2 py-0.5 uppercase">FEATURED WORK</span>
+          <h2 class="text-2xl font-display font-extrabold uppercase text-white mt-1">FILM &amp; VIDEO PORTFOLIO</h2>
+        </div>
+        <span class="text-xs text-film-400 font-mono">SELECTED PROJECTS (2024–2026)</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="bg-film-900 border border-film-700 overflow-hidden group">
+          <div class="relative aspect-video bg-film-800 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=800&q=80" alt="Project 1" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+            <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+              <span class="px-3 py-1.5 bg-white text-black font-extrabold text-xs uppercase flex items-center space-x-1">
+                <i data-lucide="play" class="w-3.5 h-3.5 fill-black"></i>
+                <span>WATCH REEL</span>
+              </span>
+            </div>
+          </div>
+          <div class="p-4 space-y-2">
+            <span class="text-[10px] bg-film-800 text-film-300 px-2 py-0.5 border border-film-700 uppercase font-bold">SHORT FILM / NARRATIVE</span>
+            <h3 class="font-display font-extrabold text-base text-white uppercase">ECHOES OF SILENCE</h3>
+            <p class="text-xs text-film-400">Cinematography &amp; Direction for a narrative short film shot on location in moody anamorphic lenses.</p>
+          </div>
+        </div>
+
+        <div class="bg-film-900 border border-film-700 overflow-hidden group">
+          <div class="relative aspect-video bg-film-800 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1518173946687-a4c8a383392e?auto=format&fit=crop&w=800&q=80" alt="Project 2" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+            <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+              <span class="px-3 py-1.5 bg-white text-black font-extrabold text-xs uppercase flex items-center space-x-1">
+                <i data-lucide="play" class="w-3.5 h-3.5 fill-black"></i>
+                <span>WATCH REEL</span>
+              </span>
+            </div>
+          </div>
+          <div class="p-4 space-y-2">
+            <span class="text-[10px] bg-film-800 text-film-300 px-2 py-0.5 border border-film-700 uppercase font-bold">SHORT FORM / REELS</span>
+            <h3 class="font-display font-extrabold text-base text-white uppercase">NEON STREETS CAMPAIGN</h3>
+            <p class="text-xs text-film-400">High-energy vertical short-form campaign created for urban streetwear collection release.</p>
+          </div>
+        </div>
+
+        <div class="bg-film-900 border border-film-700 overflow-hidden group">
+          <div class="relative aspect-video bg-film-800 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=800&q=80" alt="Project 3" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+            <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+              <span class="px-3 py-1.5 bg-white text-black font-extrabold text-xs uppercase flex items-center space-x-1">
+                <i data-lucide="play" class="w-3.5 h-3.5 fill-black"></i>
+                <span>WATCH REEL</span>
+              </span>
+            </div>
+          </div>
+          <div class="p-4 space-y-2">
+            <span class="text-[10px] bg-film-800 text-film-300 px-2 py-0.5 border border-film-700 uppercase font-bold">INFORMATIONAL / DOC</span>
+            <h3 class="font-display font-extrabold text-base text-white uppercase">THE ARTISAN PROCESS</h3>
+            <p class="text-xs text-film-400">Documentary-style brand film spotlighting craft creators and studio workflows.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: SCHEDULE & CALL SHEET BOOKING PORTAL -->
+    <section id="tab-schedule" class="space-y-6 hidden">
+      
+      <!-- STUDIO AVAILABILITY ADMIN PANEL -->
+      <div id="admin-panel" class="mb-8 border-2 border-black bg-white text-black p-6 hidden transition-all duration-200">
+        <div class="flex items-center justify-between border-b-2 border-black pb-4 mb-4">
+          <div>
+            <span class="text-xs font-mono font-bold bg-black text-white px-2 py-0.5 uppercase">CREW MANAGEMENT CONSOLE</span>
+            <h2 class="text-xl font-display font-extrabold uppercase tracking-tight text-black mt-1">ADMIN SCHEDULE MODE</h2>
+          </div>
+          <button id="btn-close-admin" class="p-2 text-black hover:bg-neutral-200 border border-black transition">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+
+        <p class="text-xs text-neutral-600 font-mono mb-4">
+          All dates are unavailable by default. Click or drag across dates to set availability.
+        </p>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div class="lg:col-span-7 flex flex-col">
+            <div class="flex items-center justify-between mb-3 bg-neutral-100 p-2.5 border border-neutral-300">
+              <span id="admin-month-year" class="font-bold text-sm text-black uppercase"></span>
+              <div class="flex items-center space-x-1">
+                <button id="admin-prev-month" class="p-1.5 bg-white border border-black hover:bg-neutral-200 text-black transition">
+                  <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                </button>
+                <button id="admin-next-month" class="p-1.5 bg-white border border-black hover:bg-neutral-200 text-black transition">
+                  <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-7 gap-1 text-center text-[10px] font-bold text-neutral-600 mb-2 py-1 bg-neutral-100 border border-neutral-300 uppercase">
+              <div>SUN</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div>
+            </div>
+
+            <div id="admin-calendar-days" class="grid grid-cols-7 gap-1 text-xs select-none"></div>
+          </div>
+
+          <div class="lg:col-span-5 border-t lg:border-t-0 lg:border-l border-neutral-300 pt-6 lg:pt-0 lg:pl-6 flex flex-col justify-between space-y-4">
+            <div class="space-y-3 font-mono text-xs">
+              <div class="p-3 bg-neutral-100 border border-neutral-300">
+                <span class="font-bold text-black block mb-2">LEGEND</span>
+                <div class="space-y-2 text-[11px]">
+                  <div class="flex items-center space-x-2">
+                    <span class="w-4 h-4 bg-emerald-100 border-2 border-emerald-600 inline-block"></span>
+                    <span class="text-emerald-800 font-bold">Available for Booking (Green)</span>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <span class="w-4 h-4 bg-rose-100 border-2 border-rose-600 inline-block"></span>
+                    <span class="text-rose-800 font-bold line-through">Blocked / Unavailable (Red)</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="p-3 bg-neutral-100 border border-neutral-300 space-y-2">
+                <span class="font-bold text-black block">QUICK ACTIONS</span>
+                <button id="btn-clear-blackouts" class="w-full py-2 bg-white border border-black text-black hover:bg-neutral-200 transition text-xs font-bold uppercase">
+                  RESET ALL DATES TO UNAVAILABLE
+                </button>
+              </div>
+            </div>
+
+            <div class="p-3 bg-black text-white text-[11px] font-bold text-center">
+              STUDIO AVAILABILITY SAVED AUTOMATICALLY
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Call Sheet Workflow Nav Bar -->
+      <nav id="step-bar" class="mb-6">
+        <div class="border-2 border-white bg-film-900 p-2">
+          <div class="grid grid-cols-3 gap-2 text-center text-xs font-bold uppercase">
+            <button id="step-tab-1" onclick="navigateToStep(1)" class="py-2.5 px-2 bg-white text-black font-extrabold flex items-center justify-center space-x-2 transition">
+              <span class="bg-black text-white text-[10px] px-1.5 py-0.5">01</span>
+              <span class="truncate">CATEGORY</span>
+            </button>
+            <button id="step-tab-2" onclick="navigateToStep(2)" class="py-2.5 px-2 bg-film-850 text-film-400 flex items-center justify-center space-x-2 transition">
+              <span class="bg-film-700 text-white text-[10px] px-1.5 py-0.5">02</span>
+              <span class="truncate">DATES &amp; SCHEDULE</span>
+            </button>
+            <button id="step-tab-3" onclick="navigateToStep(3)" class="py-2.5 px-2 bg-film-850 text-film-400 flex items-center justify-center space-x-2 transition">
+              <span class="bg-film-700 text-white text-[10px] px-1.5 py-0.5">03</span>
+              <span class="truncate">BRIEF &amp; CONTACT</span>
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      <!-- STEP 1: Category Selection -->
+      <section id="step-1" class="space-y-6">
+        <div class="border-2 border-white bg-film-900">
+          <div class="callsheet-grid-header p-3 flex items-center justify-between border-b border-white">
+            <span class="text-sm">SECTION 1: PRODUCTION CATEGORY</span>
+            <span class="text-xs font-mono font-normal">FORM: CS-01</span>
+          </div>
+
+          <div class="p-6 space-y-6">
+            <div>
+              <label class="block text-xs font-bold text-white uppercase mb-2">1.1 SELECT PRODUCTION CATEGORY *</label>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="service-grid">
+                
+                <div data-service="Short form content" class="service-card p-4 border border-film-700 bg-film-850 text-left flex items-start space-x-3 hover:border-white transition group cursor-pointer w-full">
+                  <div class="w-8 h-8 bg-film-900 border border-film-700 flex items-center justify-center text-white shrink-0 group-hover:bg-white group-hover:text-black pointer-events-none">
+                    <i data-lucide="smartphone" class="w-4 h-4"></i>
+                  </div>
+                  <div class="pointer-events-none">
+                    <h3 class="font-bold text-sm text-white">Short form content</h3>
+                    <p class="text-xs text-film-400 mt-0.5">Reels, TikToks, YouTube Shorts, rapid vertical content.</p>
+                  </div>
+                </div>
+
+                <div data-service="Informational Video" class="service-card p-4 border border-film-700 bg-film-850 text-left flex items-start space-x-3 hover:border-white transition group cursor-pointer w-full">
+                  <div class="w-8 h-8 bg-film-900 border border-film-700 flex items-center justify-center text-white shrink-0 group-hover:bg-white group-hover:text-black pointer-events-none">
+                    <i data-lucide="projector" class="w-4 h-4"></i>
+                  </div>
+                  <div class="pointer-events-none">
+                    <h3 class="font-bold text-sm text-white">Informational Video</h3>
+                    <p class="text-xs text-film-400 mt-0.5">Brand films, explainers, mini-docs, interviews.</p>
+                  </div>
+                </div>
+
+                <div data-service="Film" class="service-card p-4 border border-film-700 bg-film-850 text-left flex items-start space-x-3 hover:border-white transition group cursor-pointer w-full">
+                  <div class="w-8 h-8 bg-film-900 border border-film-700 flex items-center justify-center text-white shrink-0 group-hover:bg-white group-hover:text-black pointer-events-none">
+                    <i data-lucide="disc-3" class="w-4 h-4"></i>
+                  </div>
+                  <div class="pointer-events-none">
+                    <h3 class="font-bold text-sm text-white">Film</h3>
+                    <p class="text-xs text-film-400 mt-0.5">Narrative shorts, music videos, indie feature projects.</p>
+                  </div>
+                </div>
+
+                <div data-service="Other" class="service-card p-4 border border-film-700 bg-film-850 text-left flex items-start space-x-3 hover:border-white transition group cursor-pointer w-full">
+                  <div class="w-8 h-8 bg-film-900 border border-film-700 flex items-center justify-center text-white shrink-0 group-hover:bg-white group-hover:text-black pointer-events-none">
+                    <i data-lucide="sparkles" class="w-4 h-4"></i>
+                  </div>
+                  <div class="pointer-events-none">
+                    <h3 class="font-bold text-sm text-white">Other</h3>
+                    <p class="text-xs text-film-400 mt-0.5">Custom video, audio recording, color grading, editing.</p>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="pt-4 border-t border-film-800 flex justify-end">
+              <button id="btn-to-step-2" class="px-6 py-2.5 bg-white text-black font-extrabold text-xs uppercase hover:bg-film-200 transition flex items-center space-x-2 border border-white">
+                <span>PROCEED TO SHOOT DATES</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP 2: Calendar & Call Slots -->
+      <section id="step-2" class="space-y-6 hidden">
+        <div class="border-2 border-white bg-film-900">
+          <div class="callsheet-grid-header p-3 flex items-center justify-between border-b border-white">
+            <span class="text-sm">SECTION 2: CALL TIME &amp; PRODUCTION CALENDAR</span>
+            <span class="text-xs font-mono font-normal">FORM: CS-02</span>
+          </div>
+
+          <div class="p-6 space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+              <div class="lg:col-span-7 flex flex-col">
+                <div class="flex items-center justify-between mb-3 bg-film-850 p-2.5 border border-film-700">
+                  <span id="current-month-year" class="font-bold text-sm text-white uppercase"></span>
+                  <div class="flex items-center space-x-1">
+                    <button id="btn-prev-month" class="p-1.5 bg-film-900 border border-film-700 hover:bg-film-800 text-white transition">
+                      <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                    </button>
+                    <button id="btn-next-month" class="p-1.5 bg-film-900 border border-film-700 hover:bg-film-800 text-white transition">
+                      <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-7 gap-1 text-center text-[10px] font-bold text-film-400 mb-2 py-1 bg-film-850 border border-film-700 uppercase">
+                  <div>SUN</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div>
+                </div>
+
+                <div id="calendar-days" class="grid grid-cols-7 gap-1 text-xs"></div>
+              </div>
+
+              <div class="lg:col-span-5 border-t lg:border-t-0 lg:border-l border-film-800 pt-6 lg:pt-0 lg:pl-6 flex flex-col justify-between">
+                <div>
+                  <div class="border-b border-film-800 pb-2 mb-4 flex items-center justify-between">
+                    <span class="text-xs font-bold text-white uppercase flex items-center space-x-1">
+                      <i data-lucide="clock" class="w-3.5 h-3.5 text-white"></i>
+                      <span id="slot-heading">CALL SLOTS</span>
+                    </span>
+                    <span id="selected-date-badge" class="text-[10px] px-2 py-0.5 bg-film-800 text-white border border-film-700 uppercase font-bold">NO SELECTION</span>
+                  </div>
+
+                  <div id="time-slots-container" class="space-y-2 max-h-64 overflow-y-auto pr-1">
+                    <div class="py-12 text-center text-xs text-film-400">Select a date on the calendar.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="pt-4 border-t border-film-800 flex items-center justify-between">
+              <button id="btn-back-to-step-1" class="px-4 py-2 border border-film-700 bg-film-850 text-film-300 hover:bg-film-800 text-xs font-bold uppercase transition">BACK</button>
+              <button id="btn-to-step-3" disabled class="px-6 py-2.5 bg-white text-black font-extrabold text-xs uppercase hover:bg-film-200 transition flex items-center space-x-2 border border-white disabled:opacity-20 disabled:cursor-not-allowed">
+                <span>PROCEED TO BRIEF</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP 3: Brief & Contact -->
+      <section id="step-3" class="space-y-6 hidden">
+        <div class="border-2 border-white bg-film-900">
+          <div class="callsheet-grid-header p-3 flex items-center justify-between border-b border-white">
+            <span class="text-sm">SECTION 3: PRODUCTION BRIEF &amp; CREW CONTACT</span>
+            <span class="text-xs font-mono font-normal">FORM: CS-03</span>
+          </div>
+
+          <div class="p-6 space-y-6">
+            <div>
+              <label for="request-details" class="block text-xs font-bold text-white uppercase mb-2">3.1 WHAT ARE YOU LOOKING FOR US TO DO? *</label>
+              <textarea id="request-details" rows="4" class="w-full p-3 bg-film-850 border border-film-700 text-white placeholder-film-400 text-xs focus:outline-none focus:border-white resize-none" placeholder="Detail scene requirements, editing scope, audio setup, video style..."></textarea>
+            </div>
+
+            <div class="pt-4 border-t border-film-800 space-y-4">
+              <span class="block text-xs font-bold text-white uppercase">3.2 CLIENT / PRODUCER CONTACT INFORMATION *</span>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs text-film-200 mb-1 font-bold">FULL NAME *</label>
+                  <input type="text" id="user-name" required placeholder="Alex Rivera" class="w-full p-2.5 bg-film-850 border border-film-700 text-white placeholder-film-400 text-xs focus:outline-none focus:border-white">
+                </div>
+
+                <div>
+                  <div class="flex items-center justify-between mb-1">
+                    <label class="block text-xs text-film-200 font-bold">DIRECT EMAIL *</label>
+                  </div>
+                  <input type="email" id="user-email" required placeholder="alex@studio.com" class="w-full p-2.5 bg-film-850 border border-film-700 text-white placeholder-film-400 text-xs focus:outline-none focus:border-white">
+                </div>
+
+                <div class="sm:col-span-2">
+                  <label class="block text-xs text-film-200 mb-1 font-bold">PHONE / WHATSAPP (OPTIONAL)</label>
+                  <input type="tel" id="user-phone" placeholder="+1 (555) 019-2834" class="w-full p-2.5 bg-film-850 border border-film-700 text-white placeholder-film-400 text-xs focus:outline-none focus:border-white">
+                </div>
+              </div>
+            </div>
+
+            <div class="pt-4 border-t border-film-800 flex items-center justify-between">
+              <button id="btn-back-to-step-2" class="px-4 py-2 border border-film-700 bg-film-850 text-film-300 hover:bg-film-800 text-xs font-bold uppercase transition">BACK</button>
+              <button id="btn-to-step-summary" class="px-6 py-2.5 bg-white text-black font-extrabold text-xs uppercase hover:bg-film-200 transition flex items-center space-x-2 border border-white">
+                <span>REVIEW CALL SHEET</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP SUMMARY -->
+      <section id="step-summary" class="space-y-6 hidden">
+        <div class="border-2 border-white bg-film-900">
+          <div class="callsheet-grid-header p-3 flex items-center justify-between border-b border-white">
+            <span class="text-sm">FINAL CALL SHEET VERIFICATION</span>
+            <span class="text-xs font-mono font-normal">CALL SHEET REF: AUTO</span>
+          </div>
+
+          <div class="p-6 space-y-6">
+            <div class="border border-film-700 bg-film-850 p-4 space-y-4 text-xs">
+              <div class="flex justify-between items-start pb-3 border-b border-film-800">
+                <div>
+                  <span class="text-[10px] text-film-400 uppercase block font-bold">PRODUCTION CATEGORY</span>
+                  <p id="summary-mode-service" class="font-bold text-white text-sm mt-0.5">-</p>
+                </div>
+                <button id="btn-edit-service" onclick="navigateToStep(1)" class="text-[11px] text-white hover:underline font-bold">EDIT</button>
+              </div>
+
+              <div class="flex justify-between items-start pb-3 border-b border-film-800">
+                <div>
+                  <span class="text-[10px] text-film-400 uppercase block font-bold">SHOOT DATE &amp; CALL SLOT</span>
+                  <p id="summary-dates" class="font-bold text-white text-sm mt-0.5">-</p>
+                </div>
+                <button id="btn-edit-dates" onclick="navigateToStep(2)" class="text-[11px] text-white hover:underline font-bold">EDIT</button>
+              </div>
+
+              <div class="pb-3 border-b border-film-800">
+                <span class="text-[10px] text-film-400 uppercase block font-bold">CONTACT INFO</span>
+                <p id="summary-contact" class="text-white mt-0.5">-</p>
+              </div>
+
+              <div>
+                <span class="text-[10px] text-film-400 uppercase block font-bold mb-1">PROJECT BRIEF / VISION</span>
+                <p id="summary-notes" class="text-xs text-film-100 bg-film-900 p-3 border border-film-800 leading-relaxed whitespace-pre-line font-sans">-</p>
+              </div>
+            </div>
+
+            <div class="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3">
+              <button id="btn-back-to-step-3" class="w-full sm:w-auto px-4 py-2 border border-film-700 bg-film-850 text-film-300 hover:bg-film-800 text-xs font-bold uppercase transition">BACK</button>
+              <button id="btn-submit-booking" class="w-full sm:w-auto px-8 py-3 bg-white hover:bg-film-200 text-black font-extrabold text-xs uppercase transition flex items-center justify-center space-x-2 border border-white">
+                <i data-lucide="send" class="w-4 h-4"></i>
+                <span>TRANSMIT CALL SHEET</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP CONFIRMATION -->
+      <section id="step-4" class="space-y-6 hidden">
+        <div class="border-2 border-white bg-film-900 p-6 sm:p-8 text-center space-y-6">
+          <div class="w-16 h-16 bg-white text-black border border-white flex items-center justify-center mx-auto">
+            <i data-lucide="clapperboard" class="w-8 h-8"></i>
+          </div>
+
+          <div>
+            <div class="inline-block bg-white text-black font-bold text-xs uppercase px-3 py-0.5 mb-2">CALL SHEET DISPATCHED</div>
+            <h2 class="text-2xl sm:text-3xl font-display font-extrabold uppercase text-white">INQUIRY LOGGED</h2>
+            <p class="text-xs font-mono text-film-400 mt-1">LOG ID: <span id="conf-ref-id" class="font-bold text-white">#CS-0000</span></p>
+          </div>
+
+          <div class="bg-film-850 p-4 text-left space-y-2 text-xs font-mono text-film-200 border border-film-800">
+            <p><strong class="text-white">SCHEDULE:</strong> <span id="conf-datetime">-</span></p>
+            <p><strong class="text-white">CATEGORY:</strong> <span id="conf-service">-</span></p>
+            <p><strong class="text-white">CLIENT EMAIL:</strong> <span id="conf-email">-</span></p>
+          </div>
+
+          <div class="pt-2 flex justify-center">
+            <button id="btn-reset-booking" class="px-6 py-2.5 border border-white bg-white hover:bg-film-200 text-black font-extrabold text-xs uppercase">SUBMIT ANOTHER INQUIRY</button>
+          </div>
+        </div>
+      </section>
+
+    </section>
+
+  </main>
+
+  <!-- Passcode Modal -->
+  <div id="admin-passcode-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center hidden p-4">
+    <div class="bg-film-900 border-2 border-white p-6 max-w-sm w-full space-y-4">
+      <div class="flex justify-between items-center border-b border-film-800 pb-2">
+        <h3 class="font-display font-extrabold text-white text-sm uppercase">STUDIO ADMIN ACCESS</h3>
+        <button id="btn-close-passcode-modal" class="text-film-400 hover:text-white">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+      <p class="text-xs text-film-300 font-mono">ENTER PASSCODE TO OPEN ADMIN CONSOLE:</p>
+      <div>
+        <input type="password" id="admin-passcode-input" class="w-full p-2.5 bg-film-850 border border-film-700 text-white text-center tracking-widest text-lg font-mono focus:outline-none focus:border-white" placeholder="•••••••">
+      </div>
+      <div class="flex justify-end space-x-2">
+        <button id="btn-cancel-passcode" class="px-4 py-2 border border-film-700 bg-film-850 text-film-300 text-xs font-bold uppercase">CANCEL</button>
+        <button id="btn-submit-passcode" class="px-4 py-2 bg-white text-black font-extrabold text-xs uppercase">ENTER</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer Banner -->
+  <footer class="mt-auto py-6 border-t border-film-800 bg-film-950 text-center text-xs text-film-400">
+    <div class="max-w-7xl mx-auto px-4 space-y-4">
+      <div class="bg-film-900 border border-film-700 p-4 text-center font-mono text-xs text-film-200">
+        "hey, this website is unfortunately AI generated at the moment and I plan to hire real people when I am able. thanks!"
+      </div>
+
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-2 text-film-400">
+        <div class="flex items-center space-x-2">
+          <i data-lucide="film" class="w-3.5 h-3.5 text-white"></i>
+          <span>FILMBLURR © CREATIVE STUDIO</span>
+        </div>
+        
+        <div class="flex items-center space-x-4">
+          <span class="text-[11px]">DISPATCH: beckettmoviemaker@gmail.com</span>
+          <button id="btn-toggle-admin" class="text-[10px] font-mono text-film-400 hover:text-white underline tracking-wider uppercase transition">
+            [STUDIO ADMIN]
+          </button>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notifications -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col space-y-2 pointer-events-none font-mono text-xs"></div>
+
+  <!-- Main JavaScript Logic -->
+  <script>
+    const todayDate = new Date();
+    todayDate.setHours(0,0,0,0);
+
+    const maxDate = new Date(todayDate);
+    maxDate.setMonth(maxDate.getMonth() + 2);
+
+    const state = {
+      activeTab: 'home',
+      currentStep: 1,
+      viewingDate: new Date(todayDate.getFullYear(), todayDate.getMonth(), 1),
+      adminViewingDate: new Date(todayDate.getFullYear(), todayDate.getMonth(), 1),
+      selectedDate: null,
+      selectedTime: null,
+      selectedService: 'Short form content',
+      requestDetails: '',
+      contactInfo: { name: '', email: '', phone: '' },
+      primaryEmail: 'beckettmoviemaker@gmail.com',
+      // Store AVAILABLE dates explicitly
+      availableDates: JSON.parse(localStorage.getItem('studio_available_dates') || '[]'),
+      isAdminDragging: false,
+      adminDragTargetState: null
+    };
+
+    const SHOOT_TIME_SLOTS = [
+      "09:00 AM Morning Call", 
+      "11:00 AM Late Morning Block", 
+      "01:00 PM Early Afternoon", 
+      "03:00 PM Late Afternoon Block", 
+      "05:00 PM Wrap Call"
+    ];
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      if (!container) return;
+      const toast = document.createElement('div');
+      toast.className = `px-4 py-2.5 border text-xs font-mono font-bold uppercase transition-all duration-300 opacity-0 transform translate-y-2 shadow-lg ${
+        type === 'error' 
+          ? 'bg-rose-950 border-rose-500 text-rose-200' 
+          : 'bg-white border-white text-black'
+      }`;
+      toast.textContent = message;
+      container.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.classList.remove('opacity-0', 'translate-y-2');
+      }, 10);
+
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-2');
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
+    function formatDateKey(d) {
+      if (!d) return '';
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+
+    function switchMainTab(tabName) {
+      state.activeTab = tabName;
+      ['home', 'portfolio', 'schedule'].forEach(t => {
+        const sec = document.getElementById(`tab-${t}`);
+        const btn = document.getElementById(`nav-${t}`);
+        if (sec) sec.classList.toggle('hidden', t !== tabName);
+        if (btn) {
+          if (t === tabName) {
+            btn.className = "flex-1 md:flex-initial px-6 py-3 bg-white text-black font-extrabold border border-white transition flex items-center justify-center space-x-2";
+          } else {
+            btn.className = "flex-1 md:flex-initial px-6 py-3 bg-film-850 text-film-300 hover:text-white border border-film-700 hover:border-white transition flex items-center justify-center space-x-2";
+          }
+        }
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function navigateToStep(stepNumber) {
+      state.currentStep = stepNumber;
+      
+      const steps = [1, 2, 3, 'summary', 4];
+      steps.forEach(s => {
+        const el = document.getElementById(`step-${s}`);
+        if (el) el.classList.add('hidden');
+      });
+
+      const currentEl = document.getElementById(`step-${stepNumber}`);
+      if (currentEl) currentEl.classList.remove('hidden');
+
+      const stepBar = document.getElementById('step-bar');
+      if (stepBar) {
+        stepBar.classList.toggle('hidden', stepNumber === 4);
+      }
+
+      for (let i = 1; i <= 3; i++) {
+        const tabBtn = document.getElementById(`step-tab-${i}`);
+        if (tabBtn) {
+          if (i === stepNumber) {
+            tabBtn.className = "py-2.5 px-2 bg-white text-black font-extrabold flex items-center justify-center space-x-2 transition";
+          } else if (i < stepNumber) {
+            tabBtn.className = "py-2.5 px-2 bg-film-800 text-white font-bold flex items-center justify-center space-x-2 transition";
+          } else {
+            tabBtn.className = "py-2.5 px-2 bg-film-850 text-film-400 flex items-center justify-center space-x-2 transition";
+          }
+        }
+      }
+
+      if (stepNumber === 2) {
+        renderCalendar();
+      } else if (stepNumber === 'summary') {
+        populateSummary();
+      }
+      
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function renderCalendar() {
+      const container = document.getElementById('calendar-days');
+      const monthYearLabel = document.getElementById('current-month-year');
+      if (!container || !monthYearLabel) return;
+
+      container.innerHTML = '';
+      
+      const year = state.viewingDate.getFullYear();
+      const month = state.viewingDate.getMonth();
+      
+      const monthNames = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
+      monthYearLabel.textContent = `${monthNames[month]} ${year}`;
+
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      for (let i = 0; i < firstDay; i++) {
+        const empty = document.createElement('div');
+        empty.className = "h-10 border border-transparent";
+        container.appendChild(empty);
+      }
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const cellDate = new Date(year, month, day);
+        cellDate.setHours(0,0,0,0);
+        const key = formatDateKey(cellDate);
+        
+        const btn = document.createElement('button');
+        btn.textContent = day;
+
+        const isPast = cellDate < todayDate;
+        const isBeyondMax = cellDate > maxDate;
+        // Default to unavailable: only available if present in state.availableDates
+        const isAvailable = state.availableDates.includes(key);
+        const isDisabled = isPast || isBeyondMax || !isAvailable;
+
+        let bgClasses = "bg-film-850 text-white border-film-700 hover:border-white";
+        
+        if (state.selectedDate && formatDateKey(state.selectedDate) === key) {
+          bgClasses = "bg-white text-black font-extrabold border-white";
+        } else if (isDisabled) {
+          bgClasses = "bg-film-950 text-film-600 border-film-850 cursor-not-allowed opacity-40 line-through";
+        }
+
+        btn.className = `h-10 border text-xs font-mono font-bold flex items-center justify-center transition ${bgClasses}`;
+        
+        if (!isDisabled) {
+          btn.onclick = () => {
+            state.selectedDate = cellDate;
+            state.selectedTime = null;
+            renderCalendar();
+            renderTimeSlots();
+            updateStep2NextButton();
+          };
+        }
+
+        container.appendChild(btn);
+      }
+
+      const prevBtn = document.getElementById('btn-prev-month');
+      if (prevBtn) {
+        prevBtn.disabled = year === todayDate.getFullYear() && month === todayDate.getMonth();
+        prevBtn.classList.toggle('opacity-30', prevBtn.disabled);
+      }
+    }
+
+    function renderTimeSlots() {
+      const slotsContainer = document.getElementById('time-slots-container');
+      const badge = document.getElementById('selected-date-badge');
+      if (!slotsContainer || !badge) return;
+
+      if (!state.selectedDate) {
+        badge.textContent = "NO SELECTION";
+        slotsContainer.innerHTML = '<div class="py-12 text-center text-xs text-film-400 font-mono">Select an available date on the calendar.</div>';
+        return;
+      }
+
+      badge.textContent = formatDateKey(state.selectedDate);
+      slotsContainer.innerHTML = '';
+
+      SHOOT_TIME_SLOTS.forEach(slot => {
+        const btn = document.createElement('button');
+        const isSelected = state.selectedTime === slot;
+        
+        btn.className = `w-full p-2.5 text-left text-xs font-mono font-bold border transition flex items-center justify-between ${
+          isSelected 
+            ? 'bg-white text-black border-white' 
+            : 'bg-film-850 text-film-200 border-film-700 hover:border-white'
+        }`;
+
+        btn.innerHTML = `
+          <span>${slot}</span>
+          ${isSelected ? '<i data-lucide="check" class="w-3.5 h-3.5 text-black"></i>' : ''}
+        `;
+
+        btn.onclick = () => {
+          state.selectedTime = slot;
+          renderTimeSlots();
+          updateStep2NextButton();
+        };
+
+        slotsContainer.appendChild(btn);
+      });
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function updateStep2NextButton() {
+      const nextBtn = document.getElementById('btn-to-step-3');
+      if (nextBtn) {
+        nextBtn.disabled = !(state.selectedDate && state.selectedTime);
+      }
+    }
+
+    function populateSummary() {
+      const modeService = document.getElementById('summary-mode-service');
+      const dates = document.getElementById('summary-dates');
+      const contact = document.getElementById('summary-contact');
+      const notes = document.getElementById('summary-notes');
+
+      if (modeService) modeService.textContent = state.selectedService;
+      if (dates) dates.textContent = `${formatDateKey(state.selectedDate)} — ${state.selectedTime}`;
+      
+      const name = document.getElementById('user-name')?.value || '-';
+      const email = document.getElementById('user-email')?.value || '-';
+      const phone = document.getElementById('user-phone')?.value || 'N/A';
+
+      if (contact) contact.textContent = `${name} | ${email} | ${phone}`;
+      
+      const reqText = document.getElementById('request-details')?.value;
+      if (notes) notes.textContent = reqText && reqText.trim() ? reqText : 'No additional details provided.';
+    }
+
+    function renderAdminCalendar() {
+      const container = document.getElementById('admin-calendar-days');
+      const monthYearLabel = document.getElementById('admin-month-year');
+      if (!container || !monthYearLabel) return;
+
+      container.innerHTML = '';
+      
+      const year = state.adminViewingDate.getFullYear();
+      const month = state.adminViewingDate.getMonth();
+      
+      const monthNames = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
+      monthYearLabel.textContent = `${monthNames[month]} ${year}`;
+
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      const prevBtn = document.getElementById('admin-prev-month');
+      if (prevBtn) {
+        const isCurrentMonth = year === todayDate.getFullYear() && month === todayDate.getMonth();
+        prevBtn.disabled = isCurrentMonth;
+        prevBtn.classList.toggle('opacity-30', isCurrentMonth);
+        prevBtn.classList.toggle('cursor-not-allowed', isCurrentMonth);
+      }
+
+      for (let i = 0; i < firstDay; i++) {
+        const empty = document.createElement('div');
+        empty.className = "h-10 border border-transparent";
+        container.appendChild(empty);
+      }
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const cellDate = new Date(year, month, day);
+        cellDate.setHours(0,0,0,0);
+        const key = formatDateKey(cellDate);
+        const isAvailable = state.availableDates.includes(key);
+
+        const isToday = cellDate.getTime() === todayDate.getTime();
+
+        const cell = document.createElement('div');
+        // Default to red/blocked unless isAvailable is true
+        let bg = isAvailable 
+          ? "bg-emerald-50 text-emerald-900 border-emerald-300 font-bold" 
+          : "bg-rose-100 text-rose-900 border-rose-400 font-bold line-through";
+
+        let todayHighlight = isToday ? "ring-2 ring-black font-extrabold border-black border-2 scale-105 z-10" : "";
+
+        cell.className = `h-10 border text-xs font-mono flex items-center justify-center cursor-pointer select-none transition ${bg} ${todayHighlight}`;
+        cell.textContent = day;
+
+        cell.onmousedown = (e) => {
+          e.preventDefault();
+          state.isAdminDragging = true;
+          state.adminDragTargetState = !isAvailable;
+          toggleDateAvailability(key, state.adminDragTargetState);
+        };
+
+        cell.onmouseenter = () => {
+          if (state.isAdminDragging) {
+            toggleDateAvailability(key, state.adminDragTargetState);
+          }
+        };
+
+        container.appendChild(cell);
+      }
+    }
+
+    function toggleDateAvailability(key, setAvailable) {
+      const idx = state.availableDates.indexOf(key);
+      if (setAvailable && idx === -1) {
+        state.availableDates.push(key);
+      } else if (!setAvailable && idx !== -1) {
+        state.availableDates.splice(idx, 1);
+      }
+      localStorage.setItem('studio_available_dates', JSON.stringify(state.availableDates));
+      renderAdminCalendar();
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) lucide.createIcons();
+
+      // Service selection card clicks
+      const serviceGrid = document.getElementById('service-grid');
+      if (serviceGrid) {
+        serviceGrid.addEventListener('click', (e) => {
+          const card = e.target.closest('.service-card');
+          if (!card) return;
+          
+          document.querySelectorAll('.service-card').forEach(c => {
+            c.classList.remove('border-white', 'bg-white', 'text-black');
+            c.classList.add('border-film-700', 'bg-film-850', 'text-white');
+          });
+
+          card.classList.remove('border-film-700', 'bg-film-850', 'text-white');
+          card.classList.add('border-white', 'bg-white', 'text-black');
+
+          state.selectedService = card.dataset.service;
+        });
+      }
+
+      // Admin Modal Open / Close logic
+      const btnToggleAdmin = document.getElementById('btn-toggle-admin');
+      const adminModal = document.getElementById('admin-passcode-modal');
+      const btnClosePasscodeModal = document.getElementById('btn-close-passcode-modal');
+      const btnCancelPasscode = document.getElementById('btn-cancel-passcode');
+      const btnSubmitPasscode = document.getElementById('btn-submit-passcode');
+      const passcodeInput = document.getElementById('admin-passcode-input');
+
+      if (btnToggleAdmin && adminModal) {
+        btnToggleAdmin.addEventListener('click', () => {
+          adminModal.classList.remove('hidden');
+          if (passcodeInput) {
+            passcodeInput.value = '';
+            passcodeInput.focus();
+          }
+        });
+      }
+
+      const hideAdminModal = () => {
+        if (adminModal) adminModal.classList.add('hidden');
+      };
+
+      if (btnClosePasscodeModal) btnClosePasscodeModal.addEventListener('click', hideAdminModal);
+      if (btnCancelPasscode) btnCancelPasscode.addEventListener('click', hideAdminModal);
+
+      const handlePasscodeSubmit = () => {
+        if (passcodeInput && passcodeInput.value === '2233123') {
+          hideAdminModal();
+          switchMainTab('schedule');
+          const adminPanel = document.getElementById('admin-panel');
+          if (adminPanel) {
+            adminPanel.classList.remove('hidden');
+            renderAdminCalendar();
+          }
+          showToast('Admin Schedule Mode Unlocked', 'info');
+        } else {
+          showToast('Incorrect Passcode', 'error');
+        }
+      };
+
+      if (btnSubmitPasscode) btnSubmitPasscode.addEventListener('click', handlePasscodeSubmit);
+      if (passcodeInput) {
+        passcodeInput.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') handlePasscodeSubmit();
+        });
+      }
+
+      // Close Admin Console
+      const btnCloseAdmin = document.getElementById('btn-close-admin');
+      if (btnCloseAdmin) {
+        btnCloseAdmin.addEventListener('click', () => {
+          const adminPanel = document.getElementById('admin-panel');
+          if (adminPanel) adminPanel.classList.add('hidden');
+        });
+      }
+
+      // Reset all dates to unavailable
+      const btnClearBlackouts = document.getElementById('btn-clear-blackouts');
+      if (btnClearBlackouts) {
+        btnClearBlackouts.addEventListener('click', () => {
+          state.availableDates = [];
+          localStorage.setItem('studio_available_dates', JSON.stringify([]));
+          renderAdminCalendar();
+          showToast('All dates reset to unavailable', 'info');
+        });
+      }
+
+      // Step Navigation Buttons
+      const btnToStep2 = document.getElementById('btn-to-step-2');
+      if (btnToStep2) btnToStep2.onclick = () => navigateToStep(2);
+
+      const btnBackToStep1 = document.getElementById('btn-back-to-step-1');
+      if (btnBackToStep1) btnBackToStep1.onclick = () => navigateToStep(1);
+
+      const btnToStep3 = document.getElementById('btn-to-step-3');
+      if (btnToStep3) btnToStep3.onclick = () => navigateToStep(3);
+
+      const btnBackToStep2 = document.getElementById('btn-back-to-step-2');
+      if (btnBackToStep2) btnBackToStep2.onclick = () => navigateToStep(2);
+
+      const btnToStepSummary = document.getElementById('btn-to-step-summary');
+      if (btnToStepSummary) {
+        btnToStepSummary.onclick = () => {
+          const name = document.getElementById('user-name')?.value;
+          const email = document.getElementById('user-email')?.value;
+          const details = document.getElementById('request-details')?.value;
+
+          if (!name || !email || !details) {
+            showToast('Please fill in all required brief & contact fields.', 'error');
+            return;
+          }
+          navigateToStep('summary');
+        };
+      }
+
+      const btnBackToStep3 = document.getElementById('btn-back-to-step-3');
+      if (btnBackToStep3) btnBackToStep3.onclick = () => navigateToStep(3);
+
+      // Month Navigation Controls
+      const btnPrevMonth = document.getElementById('btn-prev-month');
+      if (btnPrevMonth) {
+        btnPrevMonth.onclick = () => {
+          state.viewingDate.setMonth(state.viewingDate.getMonth() - 1);
+          renderCalendar();
+        };
+      }
+
+      const btnNextMonth = document.getElementById('btn-next-month');
+      if (btnNextMonth) {
+        btnNextMonth.onclick = () => {
+          state.viewingDate.setMonth(state.viewingDate.getMonth() + 1);
+          renderCalendar();
+        };
+      }
+
+      const adminPrevMonth = document.getElementById('admin-prev-month');
+      if (adminPrevMonth) {
+        adminPrevMonth.onclick = () => {
+          state.adminViewingDate.setMonth(state.adminViewingDate.getMonth() - 1);
+          renderAdminCalendar();
+        };
+      }
+
+      const adminNextMonth = document.getElementById('admin-next-month');
+      if (adminNextMonth) {
+        adminNextMonth.onclick = () => {
+          state.adminViewingDate.setMonth(state.adminViewingDate.getMonth() + 1);
+          renderAdminCalendar();
+        };
+      }
+
+      // Submit Booking Dispatch
+      const btnSubmitBooking = document.getElementById('btn-submit-booking');
+      if (btnSubmitBooking) {
+        btnSubmitBooking.onclick = () => {
+          const name = document.getElementById('user-name')?.value || '';
+          const email = document.getElementById('user-email')?.value || '';
+          const phone = document.getElementById('user-phone')?.value || 'N/A';
+          const details = document.getElementById('request-details')?.value || '';
+
+          const refId = 'CS-' + Math.floor(1000 + Math.random() * 9000);
+          const formattedDateKey = formatDateKey(state.selectedDate);
+
+          // Mailto dispatch replaced with Formspree AJAX submission
+          const submitBtn = document.getElementById('btn-submit-booking');
+          const originalBtnText = submitBtn.innerHTML;
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = `<span>TRANSMITTING...</span>`;
+
+          fetch('https://formspree.io/f/xbjnqgya', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+              _replyto: email,
+              recipient: 'beckettmoviemaker@gmail.com',
+              reference_id: refId,
+              service_category: state.selectedService,
+              shoot_date: formattedDateKey,
+              call_time: state.selectedTime,
+              client_name: name,
+              client_email: email,
+              client_phone: phone,
+              project_brief: details
+            })
+          })
+          .then(response => {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnText;
+            navigateToStep(4);
+          })
+          .catch(error => {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnText;
+            // Fallback to direct client prompt if network blocked
+            window.location.href = `mailto:${state.primaryEmail}?subject=${encodeURIComponent('PRODUCTION CALL SHEET [' + refId + ']: ' + state.selectedService)}&body=${encodeURIComponent(details)}`;
+            navigateToStep(4);
+          });
+        };
+      }
+
+      // Reset Form
+      const btnResetBooking = document.getElementById('btn-reset-booking');
+      if (btnResetBooking) {
+        btnResetBooking.onclick = () => {
+          state.selectedDate = null;
+          state.selectedTime = null;
+          state.selectedService = 'Short form content';
+          
+          const detailsEl = document.getElementById('request-details');
+          if (detailsEl) detailsEl.value = '';
+
+          navigateToStep(1);
+        };
+      }
+
+      window.addEventListener('mouseup', () => {
+        state.isAdminDragging = false;
+      });
+    });
+  </script>
+</body>
+</html>
